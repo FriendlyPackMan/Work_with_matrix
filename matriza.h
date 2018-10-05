@@ -13,10 +13,10 @@ public:
     ~Matriza();
     void Display();
     void Inversion();
+    void Mult(double**, int);
     double** getMatrix() const { return Matrix; }
-    void Mult(double**, int, int);
-    int getY() { return y; }
-    int getX() { return x; }
+    int getY() const { return y; }
+    int getX() const { return x; }
 private:
     double** Matrix;
     int y = 0, x = 0;

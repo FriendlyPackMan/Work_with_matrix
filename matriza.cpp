@@ -13,7 +13,7 @@ Matriza::Matriza(double** Mat, int y, int x) {
         Matrix[j] = new double[x];
         for (int i = 0; i < x; i++) {
             if (Mat) Matrix[j][i] = Mat[j][i];
-            else Matrix[j][i] = rand() % 5 * 1.0;
+            else Matrix[j][i] = rand() % 9 * 1.0 + 1;
         }
     }
 
@@ -31,22 +31,24 @@ void Matriza::Display() {
     cout << endl;
     for (int i = 0; i < y; i++) {
         for (int j = 0; j < x; j++)
-            cout << right << setw(9) << setprecision(2) << Matrix[i][j] << " ";
+            cout << right << setw(8) << Matrix[i][j] << " ";
         cout << endl;
     }
 }
 
 void Matriza::Inversion() {
+    //Create unitary matrix
     double** E = new double*[y];
-    for (int i = 0; i < y; i++)
+    for (int i = 0; i < y; i++) {
         E[i] = new double[x];
-
-    for (int i = 0; i < y; i++)
         for (int j = 0; j < x; j++)
             if (i == j) E[i][j] = 1;
             else E[i][j] = 0;
+    }
 
+    //Invers with Gaus
     for (int i = 0; i < x; i++) {
+        //_Check if first elem == 0
         if (Matrix[i][i] == 0) {
             int n;
             for (int k = 0; k < x; k++) {
@@ -57,6 +59,7 @@ void Matriza::Inversion() {
             }
         }
 
+        //_Make elem of main diagonal == 1
         for (int k = 0; k < x; k++) {
             if (k != i)
                 Matrix[i][k] /= Matrix[i][i];
@@ -64,6 +67,7 @@ void Matriza::Inversion() {
         }
         Matrix[i][i] /= Matrix[i][i];
 
+        //_Make all elements of the column except main diagonal == 0
         for (int j = 0; j < y; j++) {
             if (i != j) {
                 for (int k = 0; k < y; k++) {
@@ -80,15 +84,16 @@ void Matriza::Inversion() {
     Matrix = E;
 }
 
-void Matriza::Mult(double** Mat, int x_to_y, int k) {
+void Matriza::Mult(double** Mat, int k) {
     double** E = new double*[y];
     for (int i = 0; i < y; i++)
         E[i] = new double[k];
 
+    double sum;
     for (int i = 0; i < y; i++)
         for (int j = 0; j < k; j++) {
-            double sum = 0;
-            for (int f = 0; f < x_to_y; f++) {
+            sum = 0;
+            for (int f = 0; f < x; f++) {
                 sum += Matrix[i][f] * Mat[f][j];
             }
             E[i][j] = sum;
