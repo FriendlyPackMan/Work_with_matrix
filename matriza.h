@@ -12,6 +12,11 @@ public:
     Matriza(double**, int, int);
     ~Matriza();
     void Display();
+    void Inversion();
+    double** getMatrix() const { return Matrix; }
+    void Mult(double**, int, int);
+    int getY() { return y; }
+    int getX() { return x; }
 private:
     double** Matrix;
     int y = 0, x = 0;
