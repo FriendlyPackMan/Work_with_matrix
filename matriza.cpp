@@ -110,5 +110,105 @@ void Matriza::Mult(double** Mat, int k) {
 
 
 
+Matriza::Matriza(double** Mat, double* annex, int y, int x) {
+	Matrix = new double*[y];
+	srand(time(NULL));
+	for (int j = 0; j < y; j++) {
+		Matrix[j] = new double[x];
+		for (int i = 0; i < x; i++) {
+			if (Mat) Matrix[j][i] = Mat[j][i];
+			else Matrix[j][i] = rand() % 9 * 1.0 + 1;
+		}
+	}
 
+	this.annex = new double[y];
+	for (int i = 0; i < y; i++) {
+		if(annex) this.annex[i] = annex[i];
+		else annex[i] = rand() % 9 * 1.0 + 1;
+	}
 
+	this->x = x;
+	this->y = y;
+}
+
+Matriza Matriza::newMatrix(double** mat, int x, int y = x) {
+	double** newMat = new double*[y];
+	for (int j = 0; j < y; j++) {
+		newMat[j] = new double[x];
+	}
+	for (int i = 0; i < x; i++) {
+		for (int j = 0; j < x; j++) {
+			newMat[i][j] = mat[i][j];
+		}
+	}
+	Matriza newMatrix = new Matriza(newMat)
+		return newMatrix;
+}
+
+double Matriza::determinant(int x) {
+	if (x == 0) return 1.0;
+	double rez = 0;
+	for (int i = 0; i < x; i++) {
+		Matrix newMat = newMatrix(mat, x - 1);
+		rez += pow(-1, (x + 1) + (y + 1)) * Matrix[0][i] * newMat.determinant(x - 1);
+	}
+	return rez;
+}
+
+double Matriza::Crammer_Method() {
+	for (int i = 0; i < x; i++) {
+		double** newMatrix = new double*[y];
+		for (int j = 0; j < x; j++) {
+			newMat[j] = new double[x];
+		}
+		for (int j = 0; j < y; j++) {
+			for (int k = 0; k < x; k++) {
+				if (k != i) {
+					newMat[j][k] = Matrix[j][k];
+				}
+				else newMat[j][k] = annex[j];
+			}
+		}
+		Matrix newMatrix = new Matrix(newMat);
+		cout << "x1 = " << this.determinant() / newMatrix.determinant() << endl;
+	}
+}
+
+/*
+*
+	!!!!!! ÍÀÑÒÓÏÍÓ ÔÓÍÊÖ²Þ ÇÀÁÎÐÎÍÅÍÎ ÄÈÂÈÒÈÑß ËÞÄßÌ Ç² ÑËÀÁÊÎÞ ÏÑÈÕ²ÊÎÞ !!!!!!
+*
+*/
+double Matriza::Invers_Method() {
+	double** inverse = new double*[y];
+	for (int i = 0; i < y; i++) {
+		inverse[i] = new double[x];
+	}
+	double det = this.determinant();
+	for (int i = 0; i < x; i++) {
+		for (int j = 0; j < x; j++) {
+			int ix = iy = 0;
+			double** temp = new double[x - 1];
+			for (int k = 0; k < x - 1; k++) {
+				temp[k] = new double[x - 1];
+			}
+
+			for (int ii = 0; ii < x; ii++) {
+				if (ii != i) {
+					for (int jj = 0; jj < x; jj++) {
+						if (jj != j) {
+							temp[iy][ix] = Matrix[i][j];
+						}
+					}
+					iy++;
+					ix = 0;
+				}
+			}
+
+			Matriza addit = new Matriza(temp, y - 1, x - 1);
+			inverse[j][i] = pow(-1, (i + 1)*(j + 1)) * addit.determinant / det;
+		}
+	}
+// ïîìíîæèòè íà annex (ðîçâÿçêè)
+// ïîâåðíóòè ðåçóëüòàò 
+}
